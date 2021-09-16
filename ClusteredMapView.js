@@ -43,18 +43,19 @@ export default class ClusteredMapView extends PureComponent {
     this.clusterize(this.props.data)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.data !== nextProps.data)
       this.clusterize(nextProps.data)
   }
 
-  componentWillUpdate(nextProps, nextState) {
+  UNSAFE_componentWillUpdate(nextProps, nextState) {
     if (!this.isAndroid && this.props.animateClusters && this.clustersChanged(nextState))
       LayoutAnimation.configureNext(this.props.layoutAnimationConf)
   }
 
   mapRef(ref) {
     this.mapview = ref
+    return ref
   }
 
   getMapRef() {
@@ -152,6 +153,7 @@ export default class ClusteredMapView extends PureComponent {
       <MapView
         {...props}
         style={style}
+        showCompass={false}
         ref={this.mapRef}
         onRegionChangeComplete={this.onRegionChangeComplete}>
         {
