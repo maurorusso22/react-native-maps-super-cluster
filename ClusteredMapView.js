@@ -100,14 +100,32 @@ export default class ClusteredMapView extends PureComponent {
 
     return this.index.getClusters(bbox, viewport.zoom)
   }
+  
+  // ORIGINAL
+  // onClusterPress(cluster) {
 
+  //   // cluster press behavior might be extremely custom.
+  //   if (!this.props.preserveClusterPressBehavior) {
+  //     this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id)
+  //     return
+  //   }
+
+  //   // //////////////////////////////////////////////////////////////////////////////////
+  //   // NEW IMPLEMENTATION (with fitToCoordinates)
+  //   // //////////////////////////////////////////////////////////////////////////////////
+  //   // get cluster children
+  //   const children = this.index.getLeaves(cluster.properties.cluster_id, this.props.clusterPressMaxChildren)
+  //   const markers = children.map(c => c.properties.item)
+
+  //   const coordinates = markers.map(item => getCoordinatesFromItem(item, this.props.accessor, false))
+
+  //   // fit right around them, considering edge padding
+  //   this.mapview.fitToCoordinates(coordinates, { edgePadding: this.props.edgePadding })
+
+  //   this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id, markers)
+  // }
+  
   onClusterPress(cluster) {
-
-    // cluster press behavior might be extremely custom.
-    if (!this.props.preserveClusterPressBehavior) {
-      this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id)
-      return
-    }
 
     // //////////////////////////////////////////////////////////////////////////////////
     // NEW IMPLEMENTATION (with fitToCoordinates)
@@ -118,10 +136,12 @@ export default class ClusteredMapView extends PureComponent {
 
     const coordinates = markers.map(item => getCoordinatesFromItem(item, this.props.accessor, false))
 
-    // fit right around them, considering edge padding
-    this.mapview.fitToCoordinates(coordinates, { edgePadding: this.props.edgePadding })
-
-    this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id, markers)
+    if (this.props.preserveClusterPressBehavior) {
+      // fit right around them, considering edge padding
+      this.mapview.fitToCoordinates(coordinates, { edgePadding: this.props.edgePadding })
+    } else {
+      this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id, markers)
+    }
   }
 
   render() {
