@@ -125,6 +125,7 @@ export default class ClusteredMapView extends PureComponent {
   //   this.props.onClusterPress && this.props.onClusterPress(cluster.properties.cluster_id, markers)
   // }
   
+  // this is my onClusterPress method
   onClusterPress(cluster) {
 
     // //////////////////////////////////////////////////////////////////////////////////
